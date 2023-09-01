@@ -65,8 +65,8 @@ public class TaskController {
 //	}
 
 	@PutMapping("/{id}/complete")
-	public ResponseEntity<String> updateCompletionStatus(@PathVariable Long taskId) {
-		Optional<Task> taskOptional = taskService.getTaskById(taskId);
+	public ResponseEntity<String> updateCompletionStatus(@PathVariable Long id) {
+		Optional<Task> taskOptional = taskService.getTaskById(id);
 
 		if (taskOptional.isPresent()) {
 			Task task = taskOptional.get();

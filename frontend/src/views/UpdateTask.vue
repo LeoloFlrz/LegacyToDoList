@@ -2,6 +2,7 @@
 import Navbar from '../components/Navbar.vue';
 import { ref, onMounted } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+import ApiConnection from '../services/ApiConnection';
 import axios from 'axios';
 
 const task = ref({
@@ -28,20 +29,30 @@ const formatDueDateForBackend = (date) => {
     return formattedDateString;
 };
 onMounted(() => {
-    getTasks();
+    getTasks(route.params.id);
     fetchUsers();
 });
-const getTasks = () => {
-    axios.get(`http://localhost:8080/tasks/${route.params.id}`)
-        .then((res) => {
-            task.value = res.data;
-            selectedUser.value = res.data.user.id;
-            task.value.dueDate = res.data.dueDate.split('T')[0];
+// const getTasks = () => {
+//     axios.get(`http://localhost:8080/tasks/${route.params.id}`)
+//         .then((res) => {
+//             task.value = res.data;
+//             selectedUser.value = res.data.user.id;
+//             task.value.dueDate = res.data.dueDate.split('T')[0];
 
-        })
-        .catch((error) => { console.error('Not able to fetch tasks:', error.response) });
+//         })
+//         .catch((error) => { console.error('Not able to fetch tasks:', error.response) });
 
-};
+// };
+const getTasks = (id) => {
+    try {
+        ApiConnection.getTaskById(id)
+
+    } catch (error) {
+        return (error.message);
+    }
+    
+}
+
 const fetchUsers = () => {
     axios.get('http://localhost:8080/users')
         .then(res => {

@@ -15,9 +15,12 @@ class ApiConnection {
     async getTaskById(id) {
         try {
             let response = await axios.get(`${url}/${id}`);
+            task.value = res.data;
+            selectedUser.value = res.data.user.id;
+            task.value.dueDate = res.data.dueDate.split('T')[0];
             return (response);
         } catch (error) {
-            return (error.message);
+            return console.error('Not able to fetch tasks:', error.response)
         }
     }
 
