@@ -35,11 +35,17 @@ const getTasks = () => {
                 } else {
                     task.user.profilePicture = "";
                 }
+
+                
+                task.isCompleted = (task.isCompleted === 1);
+
                 return {
                     ...task,
-                    isCompleted: task.isCompleted === 1,
+                    isCompleted: task.isCompleted == true,
+                    
                   
                 }
+                
             });
             console.log(tasks)
         })
