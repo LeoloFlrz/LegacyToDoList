@@ -21,7 +21,7 @@ public class TaskController {
 	private  TaskService taskService;
 	@Autowired
 	private UserService userService;
-@PostMapping()
+	@PostMapping()
 	public ResponseEntity<String> AddTask(@RequestBody Task task){
 	User selectedUser = userService.getAllUser().stream().filter(user -> user.getId().equals(task.getUser().getId())).findFirst().
 			orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
@@ -64,13 +64,13 @@ public class TaskController {
 //		return ResponseEntity.notFound().build();
 //	}
 
-	@PutMapping("/{id}/complete")
+	@PutMapping("/{id}/status")
 	public ResponseEntity<String> updateCompletionStatus(@PathVariable Long id) {
 		Optional<Task> taskOptional = taskService.getTaskById(id);
 
 		if (taskOptional.isPresent()) {
 			Task task = taskOptional.get();
-			task.setIsCompleted(true);
+			task.setIsCompleted(!task.getIsCompleted());
 			taskService.updateTaskStatus(task);
 
 			return ResponseEntity.ok("Completion Status Updated!");

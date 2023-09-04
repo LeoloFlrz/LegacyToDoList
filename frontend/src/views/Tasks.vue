@@ -17,15 +17,7 @@ const reminder = (task) => {
 
 const getTasks = () => {
     axios
-        .get('http://localhost:8080/tasks', {
-            // params: {
-            //     id: 0,
-            //     title: searchQuery.value,
-            //     description: searchQuery.value,
-            //     dueDate: searchQuery.value,
-            //     isCompleted: searchQuery.value
-            // },
-        })
+        .get('http://localhost:8080/tasks', {})
         .then((res) => {
             // console.log(searchQuery.value);
             tasks.value = res.data.map(task => {
@@ -37,7 +29,7 @@ const getTasks = () => {
                 }
 
                 
-                task.isCompleted = (task.isCompleted === 1);
+                task.isCompleted = task.isCompleted;
 
                 return {
                     ...task,
@@ -54,7 +46,10 @@ const getTasks = () => {
         });
 };
 const updateCompletionStatus = (task) => {
-    axios.put(`http://localhost:8080/tasks/${task.id}/complete`)
+    const newTask = !task.isCompleted;
+    axios.put(`http://localhost:8080/tasks/${task.id}/status`, {
+        isCompleted: newTask
+    })
 
     .then(() => {
         console.log(task)
