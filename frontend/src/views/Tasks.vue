@@ -57,10 +57,8 @@ const deleteTask = (id) => {
         .delete(`http://localhost:8080/tasks/${id}`)
         .then(() => {
             getTasks();
-            deleteSuccess.value = true;
-            setTimeout(() => {
-                deleteSuccess.value = false;
-            }, 5000);
+            alert("Task successfully erased!");
+            location.reload();
         })
         .catch((error) => {
             console.error('Not able to fetch task:', error);
