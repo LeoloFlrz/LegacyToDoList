@@ -76,7 +76,7 @@ public class Task {
 		this.dueDate = dueDate;
 	}
 
-	public boolean isCompleted() {
+	public boolean getIsCompleted() {
 		return isCompleted;
 	}
 

@@ -1,10 +1,10 @@
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUpdated } from 'vue';
 import Navbar from '../components/Navbar.vue';
 import axios from 'axios';
 
 const tasks = ref([]);
-const searchQuery = ref('');
+// const searchQuery = ref('');
 const filterUsername = ref('');
 const filteredTasks = ref([]);
 
@@ -17,16 +17,9 @@ const reminder = (task) => {
 
 const getTasks = () => {
     axios
-        .get('http://localhost:8080/tasks', {
-            params: {
-                id: 0,
-                title: searchQuery.value,
-                description: searchQuery.value,
-                dueDate: searchQuery.value,
-                isCompleted: searchQuery.value
-            },
-        })
+        .get('http://localhost:8080/tasks', {})
         .then((res) => {
+            // console.log(searchQuery.value);
             tasks.value = res.data.map(task => {
 
                   if (task.user && task.user.profilePicture) {
@@ -34,11 +27,17 @@ const getTasks = () => {
                 } else {
                     task.user.profilePicture = "";
                 }
+
+                
+                task.isCompleted = task.isCompleted;
+
                 return {
                     ...task,
-                    isCompleted: task.isCompleted === 1,
+                    isCompleted: task.isCompleted == true,
+                    
                   
                 }
+                
             });
             console.log(tasks)
         })
@@ -47,9 +46,18 @@ const getTasks = () => {
         });
 };
 const updateCompletionStatus = (task) => {
-    axios.put(`http://localhost:8080/tasks/${task.id}/complete`)
+    const newTask = !task.isCompleted;
+    axios.put(`http://localhost:8080/tasks/${task.id}/status`, {
+        isCompleted: newTask
+    })
+
+    .then(() => {
+        console.log(task)
+    })
+    
         .catch((error) => {
             console.error('Not able to update task:', error);
+            console.log(task);
         });
 };
 const deleteTask = (id) => {
@@ -75,6 +83,11 @@ const applyFilter = () => {
 onMounted(() => {
     getTasks();
 });
+
+onUpdated(() => {
+    // updateCompletionStatus();
+});
+
 </script>
 <template>
     <main>
@@ -121,7 +134,7 @@ onMounted(() => {
                                     </td>
                                     <td v-else></td>
                                     <td>
-                                        <input type="checkbox" v-model="task.isCompleted"
+                                        <input type="checkbox" v-model="task.isCompleted" 
                                             @change="updateCompletionStatus(task)">
                                     </td>
                                     <td>
