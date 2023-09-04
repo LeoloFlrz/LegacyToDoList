@@ -1,20 +1,18 @@
 <script setup>
 import Navbar from '../components/Navbar.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeMount } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 import ApiConnection from '../services/ApiConnection';
 import axios from 'axios';
 
-const task = ref({
-    title: '',
-    description: '',
-    dueDate: '',
-    isCompleted: ''
-});
+const task = ref({});
+
 const users = ref([]);
 const selectedUser = ref('');
 const router = useRouter();
 const route = useRoute();
+const userId = ref()
+
 // changes date format
 const formatDueDateForBackend = (date) => {
     const formattedDate = new Date(date);
@@ -28,40 +26,30 @@ const formatDueDateForBackend = (date) => {
     const formattedDateString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
     return formattedDateString;
 };
-onMounted(() => {
-    getTasks(route.params.id);
+
+onMounted( async () => {
+    await getTasks(route.params.id);
     fetchUsers();
 });
-// const getTasks = () => {
-//     axios.get(`http://localhost:8080/tasks/${route.params.id}`)
-//         .then((res) => {
-//             task.value = res.data;
-//             selectedUser.value = res.data.user.id;
-//             task.value.dueDate = res.data.dueDate.split('T')[0];
 
-//         })
-//         .catch((error) => { console.error('Not able to fetch tasks:', error.response) });
 
-// };
-const getTasks = (id) => {
-    try {
-        ApiConnection.getTaskById(id)
 
-    } catch (error) {
-        return (error.message);
-    }
-    
+const getTasks = async (id) => {
+        let response = await ApiConnection.getTaskById(id)
+        console.log(response)
+        task.value = response.data;
+        userId.value = task.value.user.id
+        console.log(userId.value);
+
 }
 
-const fetchUsers = () => {
-    axios.get('http://localhost:8080/users')
-        .then(res => {
-            users.value = res.data;
-        })
-        .catch(error => {
-            console.error('Users not found!', error);
-        });
-};
+const fetchUsers = async () => {
+    let response = await ApiConnection.fetchUsers();
+    users.value = response.data;
+    console.log(users.value);
+    console.log(response);
+}
+
 const updateTask = () => {
     const formattedDueDate = formatDueDateForBackend(task.value.dueDate);
     const updatedTask = {

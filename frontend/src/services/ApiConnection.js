@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-const url = "http://localhost:8080/task"
+const url = "http://localhost:8080/tasks"
+const urlUsers = "http://localhost:8080/users"
 
 class ApiConnection {
     async getAllTasks() {
@@ -15,12 +16,12 @@ class ApiConnection {
     async getTaskById(id) {
         try {
             let response = await axios.get(`${url}/${id}`);
-            task.value = res.data;
-            selectedUser.value = res.data.user.id;
-            task.value.dueDate = res.data.dueDate.split('T')[0];
+            // task.value = res.data;
+            // selectedUser.value = res.data.user.id;
+            // task.value.dueDate = res.data.dueDate.split('T')[0];
             return (response);
         } catch (error) {
-            return console.error('Not able to fetch tasks:', error.response)
+            return console.error('Not able to fetch tasks:', error.response)        
         }
     }
 
@@ -48,6 +49,24 @@ class ApiConnection {
             return (response);
         } catch (error) {
             return (error.message);
+        }
+    }
+
+    async fetchUsersById(id) {
+        try {
+            let response = await axios.get(`${urlUsers}/${id}`)          
+            return (response)
+        } catch (error) {
+            return (error.message)
+        }
+    };
+
+    async fetchUsers() {
+        try {
+            let response = await axios.get(urlUsers)
+            return (response)
+        } catch (error) {
+            return (error.message)
         }
     }
 }
