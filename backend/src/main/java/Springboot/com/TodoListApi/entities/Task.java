@@ -33,5 +33,11 @@ public class Task {
 	private LocalDateTime dueDate;
 	private boolean isCompleted;
 
+	public boolean getIsCompleted() {
+		return isCompleted;
+	}
 
+	public void setIsCompleted(boolean completed) {
+		isCompleted = completed;
+	}
 }
