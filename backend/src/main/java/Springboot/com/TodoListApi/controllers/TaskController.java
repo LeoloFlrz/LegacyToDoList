@@ -1,7 +1,9 @@
 package Springboot.com.TodoListApi.controllers;
 
+import Springboot.com.TodoListApi.entities.Category;
 import Springboot.com.TodoListApi.entities.Task;
 import Springboot.com.TodoListApi.entities.User;
+import Springboot.com.TodoListApi.services.CategoryService;
 import Springboot.com.TodoListApi.services.TaskService;
 import Springboot.com.TodoListApi.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,15 @@ public class TaskController {
 	private  TaskService taskService;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private CategoryService categoryService;
 	@PostMapping()
 	public ResponseEntity<String> AddTask(@RequestBody Task task){
 	User selectedUser = userService.getAllUser().stream().filter(user -> user.getId().equals(task.getUser().getId())).findFirst().
 			orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
+	Category selectedCategory;
+
+	selectedCategory = categoryService.findById(categoryId).orElse(new Category());
 	task.setUser((selectedUser));
 		 taskService.createTask(task);
 		 return ResponseEntity.ok("Task Successfully Created!");

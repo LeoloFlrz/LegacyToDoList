@@ -103,6 +103,17 @@ onMounted(() => {
                                     </select>
                                 </div>
                             </div>
+                            <!-- Dropdown -->
+                            <div class="form-outline mb-4">
+                                <div class="col-md-12 form-group mb-3">
+                                    <label for="userName" class="form-label">{{ $t("category") }}</label>
+                                    <select id="userName" name="userName" class="form-control" v-model="selectedUser">
+                                        <option value="Select_from_list" disabled>Select_from_list</option>
+                                        <option v-for="user in users" :key="user.id" :value="user.id">{{ user.username }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
                             <br><br>
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group">
