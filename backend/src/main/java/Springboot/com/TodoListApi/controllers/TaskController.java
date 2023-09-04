@@ -21,7 +21,7 @@ public class TaskController {
 	private  TaskService taskService;
 	@Autowired
 	private UserService userService;
-@PostMapping()
+	@PostMapping()
 	public ResponseEntity<String> AddTask(@RequestBody Task task){
 	User selectedUser = userService.getAllUser().stream().filter(user -> user.getId().equals(task.getUser().getId())).findFirst().
 			orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
@@ -78,10 +78,6 @@ public class TaskController {
 
 		return ResponseEntity.notFound().build();
 	}
-
-
-
-
 
 	@DeleteMapping("/{id}")
 	public ResponseEntity<String> deleteTask(@PathVariable Long id){

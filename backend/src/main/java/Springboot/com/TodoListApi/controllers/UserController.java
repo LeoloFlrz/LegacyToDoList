@@ -24,16 +24,16 @@ public class UserController {
 public static String uploadDirectory = System.getProperty("user.dir")+ "/src/main/webapp/Images";
 	@PostMapping
 	public ResponseEntity<String> createUser(@ModelAttribute User user,@RequestParam("image") MultipartFile file){
-String originalFilename = file.getOriginalFilename();
-Path fileNameAndPath = Paths.get(uploadDirectory,originalFilename);
-try {
-	Files.write(fileNameAndPath,file.getBytes());
-	user.setProfilePicture(originalFilename);
-	userService.saveUser(user);
-	return ResponseEntity.ok("User Created Successfully!");
-} catch (IOException e) {
-	throw new RuntimeException(e);
-}
+	String originalFilename = file.getOriginalFilename();
+	Path fileNameAndPath = Paths.get(uploadDirectory,originalFilename);
+	try {
+		Files.write(fileNameAndPath,file.getBytes());
+		user.setProfilePicture(originalFilename);
+		userService.saveUser(user);
+		return ResponseEntity.ok("User Created Successfully!");
+	} catch (IOException e) {
+		throw new RuntimeException(e);
+	}
 		//Password Encoder
 //		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 //		String encodedPassword = passwordEncoder.encode(user.getPassword());
@@ -60,8 +60,8 @@ try {
 	@PutMapping("/{id}")
 	public ResponseEntity<String> editeUser(@RequestBody User user,@PathVariable Long id){
 		if(userService.getUserById(id).isPresent()) {
-			System.out.println("User Not Exist With This ID: "+id);
 			userService.saveUser(user);
+			System.out.println("Updated user with ID: "+id);
 		}
 		return  ResponseEntity.ok("Not Updated!");
 	}

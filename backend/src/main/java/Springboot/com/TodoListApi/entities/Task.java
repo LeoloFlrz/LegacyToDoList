@@ -13,8 +13,12 @@ public class Task {
 	private Long id;
 
 	@ManyToOne
-	@JoinColumn(name = "user_id")
+	@JoinColumn(name = "user_id",referencedColumnName = "id")
 	private User user;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "category_id", referencedColumnName = "id")
+	private Category category;
 
 	private String title;
 	private String description;
@@ -38,6 +42,14 @@ public class Task {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public Category getCategory() {
+		return category;
+	}
+
+	public void setCategory(Category category) {
+		this.category = category;
 	}
 
 	public String getTitle() {
