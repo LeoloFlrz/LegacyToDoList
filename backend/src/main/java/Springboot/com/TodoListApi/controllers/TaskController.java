@@ -23,16 +23,16 @@ public class TaskController {
 	private UserService userService;
 	@PostMapping()
 	public ResponseEntity<String> AddTask(@RequestBody Task task){
-	User selectedUser = userService.getAllUser().stream().filter(user -> user.getId().equals(task.getUser().getId())).findFirst().
-			orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
-	task.setUser((selectedUser));
-		 taskService.createTask(task);
-		 return ResponseEntity.ok("Task Successfully Created!");
+		User selectedUser = userService.getAllUser().stream().filter(user -> user.getId().equals(task.getUser().getId())).findFirst().
+				orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
+		task.setUser((selectedUser));
+		taskService.createTask(task);
+		return ResponseEntity.ok("Task Successfully Created!");
 	}
 	@GetMapping
 	public ResponseEntity< List<Task>> AllTask(){
-	List<Task> tasks = taskService.getAllTask();
-	return ResponseEntity.ok(tasks);
+		List<Task> tasks = taskService.getAllTask();
+		return ResponseEntity.ok(tasks);
 	}
 	@GetMapping("/{id}")
 	public Task getTaskById(@PathVariable Long id) {
@@ -43,7 +43,7 @@ public class TaskController {
 	public ResponseEntity<String> editeTask(@RequestBody Task task, @PathVariable Long id) {
 		if (taskService.getTaskById(id).isPresent()) {
 			User selectedUser = userService.getAllUser().stream().filter(user -> user.getId().equals(task.getUser().getId())).findFirst().
-			orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
+					orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
 			task.setUser((selectedUser));
 			taskService.updateTaskStatus(task);
 
