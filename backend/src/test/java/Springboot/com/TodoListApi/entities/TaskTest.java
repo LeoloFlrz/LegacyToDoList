@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TaskTest {
     public User user = new User(1L, "leolo", "admin", "leolo@leolo.com", null, "");
-    public Category category = new Category(1L, "testing", "testeando");
+    public Category category = new Category(1L, "testing");
     public Task firstTask = new Task(1L, user , category, "testing", "testeando", LocalDateTime.now() ,false);
 
     @Test
@@ -56,8 +56,5 @@ class TaskTest {
         assertEquals("testing", category.getTitle());
    }
 
-    @Test
-    void should_get_category_description_from_category() {
-        assertEquals("testeando", category.getDescription());
-    }
+    
 }

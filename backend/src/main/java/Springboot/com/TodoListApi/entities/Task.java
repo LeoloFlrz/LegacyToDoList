@@ -2,14 +2,12 @@
 package Springboot.com.TodoListApi.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor
@@ -34,5 +32,13 @@ public class Task {
 
 	public Task()
 	{
+	}
+
+	public void setIsCompleted(boolean isCompleted) {
+		this.isCompleted = isCompleted;
+	}
+
+	public boolean getIsCompleted() {
+		return isCompleted;
 	}
 }
