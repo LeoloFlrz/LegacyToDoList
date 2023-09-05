@@ -22,7 +22,12 @@ public class CategoryService {
         return categoryRepository.findAll();
     }
     public Category getCategoryById(Long id){
-        return categoryRepository.findById(id).orElse(new Category());
+        return categoryRepository.findById(id).orElse(null);
+    }
+
+    public Category getCategoryByTitle(String title)
+    {
+        return (categoryRepository.findByTitle(title));
     }
 
     public void deleteCategory(Long id){

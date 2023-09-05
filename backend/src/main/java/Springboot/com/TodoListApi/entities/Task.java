@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Task {
 
@@ -33,5 +32,7 @@ public class Task {
 	private LocalDateTime dueDate;
 	private boolean isCompleted;
 
-
+	public Task()
+	{
+	}
 }

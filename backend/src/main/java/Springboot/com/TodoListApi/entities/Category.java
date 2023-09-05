@@ -19,12 +19,4 @@ public class Category {
     private Long id;
 
     private String title;
-
-    private String description;
-
-    public Category(String title)
-    {
-        this.title = title;
-    }
-
 }
