@@ -1,4 +1,4 @@
-package Springboot.com.TodoListApi.controllers;
+//package Springboot.com.TodoListApi.controllers;
 
 import Springboot.com.TodoListApi.entities.Category;
 import Springboot.com.TodoListApi.entities.Task;
@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
-
+/*
 @RestController
 @RequestMapping("/categories")
 @CrossOrigin("*")
@@ -56,4 +56,4 @@ public class CategoryController {
         }
     }
 
-}
+}*/

@@ -12,7 +12,8 @@
       "Title": "عنوان",
       "description": "توضیحات",
       "duedate": "تاریخ ختم",
-      "assignTo": "واگذار به"
+      "assignTo": "واگذار به",
+	  "category":"Category"
 }
 
 
