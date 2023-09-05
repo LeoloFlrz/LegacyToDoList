@@ -70,7 +70,7 @@ public class TaskController {
 
 		if (taskOptional.isPresent()) {
 			Task task = taskOptional.get();
-			task.setIsCompleted(!task.getIsCompleted());
+			//task.setIsCompleted(!task.getIsCompleted());
 			taskService.updateTaskStatus(task);
 
 			return ResponseEntity.ok("Completion Status Updated!");
