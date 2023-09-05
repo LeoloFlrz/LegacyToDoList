@@ -31,8 +31,9 @@ public class TaskController {
 			orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
 	Category selectedCategory;
 
-	selectedCategory = categoryService.findById(categoryId).orElse(new Category());
+	selectedCategory = categoryService.getCategoryById(task.getCategory().getId());
 	task.setUser((selectedUser));
+	task.setCategory(selectedCategory);
 		 taskService.createTask(task);
 		 return ResponseEntity.ok("Task Successfully Created!");
 	}

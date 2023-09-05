@@ -22,4 +22,9 @@ public class Category {
 
     private String description;
 
+    public Category(String title)
+    {
+        this.title = title;
+    }
+
 }
