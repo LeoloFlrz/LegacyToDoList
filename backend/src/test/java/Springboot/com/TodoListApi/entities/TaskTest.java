@@ -56,5 +56,5 @@ class TaskTest {
         assertEquals("testing", category.getTitle());
    }
 
-    
+
 }
