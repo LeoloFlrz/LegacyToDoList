@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
 public class Task {
 
 	@Id
@@ -32,7 +33,6 @@ public class Task {
 	private LocalDateTime dueDate;
 	private boolean isCompleted;
 
-<<<<<<< HEAD
 	public boolean getIsCompleted() {
 		return isCompleted;
 	}
@@ -40,13 +40,5 @@ public class Task {
 	public void setIsCompleted(boolean completed) {
 		isCompleted = completed;
 	}
-	public void getIsCompleted(boolean completed) {
-		isCompleted = completed;
-	}
 
-=======
-	public Task()
-	{
-	}
->>>>>>> dev
 }
