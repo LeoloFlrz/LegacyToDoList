@@ -55,10 +55,14 @@ public class TaskController {
 	}
 	@PutMapping("/{id}")
 	public ResponseEntity<String> editeTask(@RequestBody Task task, @PathVariable Long id) {
+		Category updatedCategory;
 		if (taskService.getTaskById(id).isPresent()) {
 			User selectedUser = userService.getAllUser().stream().filter(user -> user.getId().equals(task.getUser().getId())).findFirst().
 			orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
 			task.setUser((selectedUser));
+
+			updatedCategory = categoryService.getCategoryByTitle(task.getCategory().getTitle());
+			task.setCategory(updatedCategory);
 			taskService.updateTaskStatus(task);
 
 			return ResponseEntity.ok("Task Updated!");
