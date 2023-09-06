@@ -7,13 +7,15 @@ ToDoList ha sido creado para mejorar la vida de los desarrolladores, facilitando
 
 ## Equipo
 
-- [@Kevin Panjón](https://github.com/KevinPanjon)
+- [@Carmen Borja](https://github.com/carmenb2020)
 
-- [@Habibullah Afzali](https://github.com/HabibullahAfzali)
+- [@Miguel Pechero](https://github.com/drawmakerr)
 
-- [@David Quero](https://github.com/keroplas)
+- [@César Conte](https://github.com/cesarconte)
 
-- [@Carlos](https://github.com/dosdedoce)
+- [@Luis Álvarez](https://github.com/luisalvarez246)
+
+- [@Leolo Flórez](https://github.com/LeoloFlrz)
 
 
 
@@ -23,13 +25,15 @@ ToDoList ha sido creado para mejorar la vida de los desarrolladores, facilitando
 - Actualizar Tareas
 - Seguimiento de usuarios
 - Marcar tareas completadas
+- Crear categorías
+- Asignar categorías a las tareas
 
 
 ## Clone and Installation
 
 Clonar el Repositorio: Clona este repositorio en tu máquina local usando el siguiente comando:
 
-git clone https://github.com/HabibullahAfzali/Springboot_TodoList.git
+git clone https://github.com/LeoloFlrz/LegacyToDoList.git
 
 Install the project with npm
 
@@ -43,11 +47,11 @@ Install the project with npm
 
     Para el BackEnd:
   
-Base de Datos: Configura una base de datos MySQL en tu servidor local. Crea una base de datos llamada todolist_db.
+Base de Datos: Configura una base de datos MySQL en tu servidor local. Crea una base de datos llamada db_legacytodo.
 
 Configuración de la Base de Datos: Abre el archivo src/main/resources/application.properties y configura las propiedades de la base de datos de acuerdo a tu entorno:
 ---------------------------------------------------
-spring.datasource.url=jdbc:mysql://localhost:3306/todolist_db
+spring.datasource.url=jdbc:mysql://localhost:3306/db_legacytodo
 spring.datasource.username=tu_usuario
 spring.datasource.password=tu_contraseña
 spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
@@ -58,10 +62,7 @@ Compilar y Ejecutar: Desde la línea de comandos, ve a la carpeta raíz del proy
 mvn spring-boot: run
 Acceder a la Aplicación: Abre tu navegador web y accede a http://localhost:8080 para utilizar la aplicación ToDoList.
 ```
-    
-## Screenshots
 
-![App Screenshot]([https://via.placeholder.com/468x300?text=App+Screenshot+Here](https://github.com/HabibullahAfzali/Springboot_TodoList/blob/development/frontend/src/assets/ScreenShots/SingUp.png)https://github.com/HabibullahAfzali/Springboot_TodoList/blob/development/frontend/src/assets/ScreenShots/SingUp.png)
 
 
 ## Tech Stack
@@ -70,3 +71,4 @@ Acceder a la Aplicación: Abre tu navegador web y accede a http://localhost:8080
 
 **Server:** Java, SpringBoot
 # LegacyToDoList
+
