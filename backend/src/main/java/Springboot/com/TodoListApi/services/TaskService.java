@@ -12,28 +12,31 @@ import java.util.Optional;
 public class TaskService {
 @Autowired
 private TaskRepository taskRepository;
-public void createTask(Task task){
+/*public void createTask(Task task){
 	 taskRepository.save(task);
-
+}*/
+public Task createTask(Task task) {
+	return taskRepository.save(task);
 }
 
 public List<Task> getAllTask(){
 	return taskRepository.findAll();
 }
-	public Optional<Task> getTaskById(Long id){
-		return taskRepository.findById(id);
+public Optional<Task> getTaskById(Long id){
+	return taskRepository.findById(id);
 
-	}
-	public void updateTaskStatus(Task task){
+}
+public void updateTaskStatus(Task task){
 		taskRepository.save(task);
 	}
 
-	public void deleteTask(Long id){
-		Optional<Task> task = taskRepository.findById(id);
-		if(task.isEmpty()){
-			System.out.println("Task not exist");
-		}
-		taskRepository.deleteById(id);
-
+public void deleteTask(Long id){
+	Optional<Task> task = taskRepository.findById(id);
+	if(task.isEmpty()){
+		System.out.println("Task not exist");
 	}
+	taskRepository.deleteById(id);
+
+}
+
 }

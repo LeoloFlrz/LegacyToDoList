@@ -2,7 +2,10 @@
 package Springboot.com.TodoListApi.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -11,6 +14,8 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @AllArgsConstructor
+@NoArgsConstructor
+@CrossOrigin("*")
 public class Task {
 
 	@Id
@@ -21,7 +26,7 @@ public class Task {
 	@JoinColumn(name = "user_id",referencedColumnName = "id")
 	private User user;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id", referencedColumnName = "id")
 	private Category category;
 
@@ -30,15 +35,11 @@ public class Task {
 	private LocalDateTime dueDate;
 	private boolean isCompleted;
 
-	public Task()
-	{
-	}
-
-	public void setIsCompleted(boolean isCompleted) {
-		this.isCompleted = isCompleted;
-	}
-
 	public boolean getIsCompleted() {
 		return isCompleted;
+	}
+
+	public void setIsCompleted(boolean completed) {
+		isCompleted = completed;
 	}
 }

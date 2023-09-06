@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue';
-import axios from 'axios';
+import ApiConnection from '../services/ApiConnection'
 
 const task = ref({
     title: '',
@@ -12,35 +12,37 @@ const task = ref({
 });
 
 const users = ref([]);
+const categories = ref();
 const selectedUser = ref("Select_from_list");
+const selectedCategory = ref("Select_from_list");
+const addCategory = ref(false);
+const addedCategory = ref({title: ''});
 const router = useRouter();
+const currentCategories = ref();
+
 const addtask = () => {
     const formattedDueDate = new Date(task.value.dueDate).toISOString();
-    const newtask = {
+    const newTask = {
         ...task.value,
         dueDate: formattedDueDate,
         user: {
             id: selectedUser.value
+        },
+        category: {
+            title: selectedCategory.value
         }
     }
-    axios.post('http://localhost:8080/tasks', newtask)
-        .then(() => {
-            alert("task Sucessfully added!")
-            router.push('/tasklist');
-        })
-        .catch(error => {
-            console.error("Not able to add task:", error);
-            console.log(Response.error.data);
-        });
-};
-const fetchUsers = () => {
-    axios.get('http://localhost:8080/users')
-        .then(res => {
-            users.value = res.data;
-        }).catch(error => {
-            console.error('Role Not found!', error);
-        });
-};
+	try{
+		ApiConnection.addTask(newTask);
+		alert("task Sucessfully added!")
+		router.push('/tasklist');
+	}
+	catch (error)
+	{
+		alert("Not able to add task:" + error);
+	}
+}
+
 const isCompleted = computed(() => {
     return (
         task.value.description.trim() !== '' &&
@@ -49,9 +51,30 @@ const isCompleted = computed(() => {
         selectedUser.value !== 'Select_from_list'   
     );
 })
-onMounted(() => {
-    fetchUsers();
-});
+
+const ftAddCategory = () =>
+{
+	if (currentCategories.value.includes(addedCategory.value.title.toLocaleLowerCase()))
+		alert("Category already exists: " + addedCategory.value.title);
+	else
+	{
+		categories.value.push(addedCategory.value);
+		ApiConnection.addCategory(addedCategory.value);
+		alert("New category " + addedCategory.value.title + " added");
+		addedCategory.value = '';
+		addCategory.value = false;
+	}
+}
+
+onBeforeMount(async() => {
+	let uResponse = await ApiConnection.fetchUsers();
+	let cResponse = await ApiConnection.fetchCategories();
+
+	users.value = uResponse.data;
+	categories.value = cResponse.data;
+	currentCategories.value = categories.value.map(x => x.title.toLowerCase());
+})
+
 </script>
 <template>
     <main>
@@ -72,7 +95,7 @@ onMounted(() => {
                     <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
                     <h2 class="mt-3 display-5 fw-bold ls-tight text-center" style="color: hsl(218, 81%, 75%)">{{ $t("taskPageTitle") }}</h2>
                     <div class="card-body px-4 py-5 px-md-5">
-                        <form @submit.prevent="addtask">
+                        <form @submit.prevent="preventDefault">
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group mb-3">
                                     <label for="title" class="form-label">{{ $t("Title") }}</label>
@@ -103,21 +126,32 @@ onMounted(() => {
                                     </select>
                                 </div>
                             </div>
-                            <!-- Dropdown -->
+                            <!-- Category -->
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group mb-3">
-                                    <label for="userName" class="form-label">{{ $t("category") }}</label>
-                                    <select id="userName" name="userName" class="form-control" v-model="selectedUser">
-                                        <option value="Select_from_list" disabled>Select_from_list</option>
-                                        <option v-for="user in users" :key="user.id" :value="user.id">{{ user.username }}
+                                    <label for="category" class="form-label">{{ $t("category") }}</label>
+                                    <select id="category" name="category" class="form-control" v-model="selectedCategory">
+                                        <option value="Default" disabled>Select_from_list</option>
+                                        <option v-for="category in categories" :key="category.id" :value="category.title">{{ category.title }}
                                         </option>
                                     </select>
                                 </div>
                             </div>
+							<div class="add-category">
+								<div class="add-category-button">
+									<p>Add New Category</p>
+									<button class="plus-button" @click="addCategory = !addCategory">+</button>
+								</div>
+								<div v-if="addCategory">
+									<input type="text" v-model="addedCategory.title">
+									<button @click="ftAddCategory()">add</button>
+								</div>
+							</div>
                             <br><br>
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group">
-                                    <input class="btn btn-primary w-100" type="submit" :disabled="!isCompleted" value="Submit">
+                                    <!-- <input class="btn btn-primary w-100" type="submit" :disabled="!isCompleted" value="Submit"> -->
+									<button class="btn btn-primary w-100" :disabled="!isCompleted" @click="addtask()">Submit</button>
                                 </div>
                             </div>
                             <div>
@@ -129,3 +163,32 @@ onMounted(() => {
         </div>
     </main>
 </template>
+
+<style scoped>
+	.add-category
+	{
+		display: flex;
+		justify-content: space-around;
+	}
+	.add-category-button
+	{
+		display: flex;
+	}
+
+
+
+	.plus-button
+	{
+		background-color: #4CAF50;
+  		border: none;
+  		color: white;
+  		padding: 5px 10px;
+  		text-align: center;
+  		text-decoration: none;
+  		display: flex;
+    	height: 27px;
+    	align-items: center;
+  		font-size: 20px;
+		margin: 0 1rem;
+	}
+</style>

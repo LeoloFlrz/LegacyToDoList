@@ -1,25 +1,22 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import Navbar from '../components/Navbar.vue';
-import axios from 'axios';
+import ApiConnection from '../services/ApiConnection';
 
 const registeredUsers = ref([]);
 
 onMounted(async () => {
-    try {
-        const response = await axios.get('http://localhost:8080/users');
-        registeredUsers.value = response.data.map(user => {
-            if (user.profilePicture) {
-                user.profilePicture = `http://localhost:8080/Images/${user.profilePicture}`;
-            } else {
-                user.profilePicture = "";
-            }
-            return user;
-        });
-    } catch (error) {
-        console.error('Error fetching registered users:', error);
-    }
-});
+    const response = await ApiConnection.fetchUsers();
+    registeredUsers.value = await response.data.map(user => {
+        if (user.profilePicture) {
+            user.profilePicture = `http://localhost:8080/Images/${user.profilePicture}`;
+        } else {
+            user.profilePicture = "";
+        }
+        return user;
+    });
+})
+
 </script>
 <template>
     <main>

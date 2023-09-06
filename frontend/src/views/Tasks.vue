@@ -1,12 +1,28 @@
 <script setup>
-import { ref, onMounted, onUpdated } from 'vue';
+import { ref, onMounted, onUnmounted } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
 import Navbar from '../components/Navbar.vue';
-import axios from 'axios';
+import ApiConnection from '../services/ApiConnection';
 
 const tasks = ref([]);
-// const searchQuery = ref('');
 const filterUsername = ref('');
 const filteredTasks = ref([]);
+const router = useRouter();
+const route = useRoute();
+
+
+// changes date format
+const formatDueDateForBackend = (date) => {
+    const formattedDate = new Date(date);
+    const year = formattedDate.getFullYear();
+    const month = (formattedDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = formattedDate.getDate().toString().padStart(2, '0');
+    const hours = formattedDate.getHours().toString().padStart(2, '0');
+    const minutes = formattedDate.getMinutes().toString().padStart(2, '0');
+    const seconds = formattedDate.getSeconds().toString().padStart(2, '0');
+    const formattedDateString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    return formattedDateString;
+};
 
 const reminder = (task) => {
     const currentDate = new Date();
@@ -15,36 +31,22 @@ const reminder = (task) => {
     return timeRemainingInDays < 2 ? "table-danger" : "";
 };
 
-const getTasks = () => {
-    axios
-        .get('http://localhost:8080/tasks', {})
-        .then((res) => {
-            // console.log(searchQuery.value);
-            tasks.value = res.data.map(task => {
+const getTasks = async () => {
+    let response = await ApiConnection.getAllTasks();
+    tasks.value = response.data.map(task => {
+        if (task.user && task.user.profilePicture) {
+            task.user.profilePicture = `http://localhost:8080/Images/${task.user.profilePicture}`;
+        } else {
+            task.user.profilePicture = "";
+        }
+        return {
+            ...task,
+        }
+    });
 
-                  if (task.user && task.user.profilePicture) {
-                    task.user.profilePicture = `http://localhost:8080/Images/${task.user.profilePicture}`;
-                } else {
-                    task.user.profilePicture = "";
-                }
-
-                
-                task.isCompleted = task.isCompleted;
-
-                return {
-                    ...task,
-                    isCompleted: task.isCompleted == true,
-                    
-                  
-                }
-                
-            });
-            console.log(tasks)
-        })
-        .catch((error) => {
-            console.error('Not able to fetch tasks:', error);
-        });
 };
+
+/*
 const updateCompletionStatus = (task) => {
     const newTask = !task.isCompleted;
     axios.put(`http://localhost:8080/tasks/${task.id}/status`, {
@@ -60,18 +62,27 @@ const updateCompletionStatus = (task) => {
             console.log(task);
         });
 };
-const deleteTask = (id) => {
-    axios
-        .delete(`http://localhost:8080/tasks/${id}`)
-        .then(() => {
-            getTasks();
-            alert("Task successfully erased!");
-            location.reload();
-        })
-        .catch((error) => {
-            console.error('Not able to fetch task:', error);
-        });
+
+*/
+const updateCompletionStatus = async (task) => {
+    let updatedTask = task;
+    updatedTask.isCompleted = !task.isCompleted;
+    const formattedDueDate = formatDueDateForBackend(task.dueDate);
+    updatedTask.dueDate = formattedDueDate;
+    await ApiConnection.updateCompletionStatus(task.id, updatedTask);
+    task.isCompleted = updatedTask.isCompleted;
+    alert("Status updated successfully");
+    location.reload();
+}
+
+
+const deleteTask = async (id) => {
+    await ApiConnection.deleteTaskById(id);
+    getTasks();
+    alert("Task successfully erased!");
+    location.reload();
 };
+
 const applyFilter = () => {
     filteredTasks.value = tasks.value.filter(task => {
         if (!filterUsername.value.trim() || task.user && task.user.username.toLowerCase().includes(filterUsername.value.toLowerCase())) {
@@ -80,12 +91,10 @@ const applyFilter = () => {
         return false;
     });
 };
+
 onMounted(() => {
     getTasks();
-});
-
-onUpdated(() => {
-    // updateCompletionStatus();
+    applyFilter();
 });
 
 </script>
@@ -117,6 +126,7 @@ onUpdated(() => {
                                     <th scope="col">Due Date</th>
                                     <th scope="col">Assigned To</th>
                                     <th scope="col">Is Completed?</th>
+                                    <th scope="col">Category</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -134,9 +144,10 @@ onUpdated(() => {
                                     </td>
                                     <td v-else></td>
                                     <td>
-                                        <input type="checkbox" v-model="task.isCompleted" 
+                                        <input type="checkbox" id="checkbox" v-model="task.isCompleted"
                                             @change="updateCompletionStatus(task)">
                                     </td>
+                                    <td>{{ task.category.title }}</td>
                                     <td>
                                         <div class="button-group">
                                         <a class="btn btn-primary" :href="`/update/${task.id}`">Edit</a>

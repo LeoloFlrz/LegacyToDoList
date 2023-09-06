@@ -36,7 +36,6 @@ public class TaskController {
 	{
 		selectedCategory = new Category();
 		selectedCategory.setTitle(task.getCategory().getTitle());
-		// Guarda la nueva categoría en la base de datos
 		categoryService.saveCategory(selectedCategory);
 	}
 	task.setUser((selectedUser));
@@ -46,8 +45,8 @@ public class TaskController {
 	}
 	@GetMapping
 	public ResponseEntity< List<Task>> AllTask(){
-	List<Task> tasks = taskService.getAllTask();
-	return ResponseEntity.ok(tasks);
+		List<Task> tasks = taskService.getAllTask();
+		return ResponseEntity.ok(tasks);
 	}
 	@GetMapping("/{id}")
 	public Task getTaskById(@PathVariable Long id) {
@@ -56,10 +55,14 @@ public class TaskController {
 	}
 	@PutMapping("/{id}")
 	public ResponseEntity<String> editeTask(@RequestBody Task task, @PathVariable Long id) {
+		Category updatedCategory;
 		if (taskService.getTaskById(id).isPresent()) {
 			User selectedUser = userService.getAllUser().stream().filter(user -> user.getId().equals(task.getUser().getId())).findFirst().
-			orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
+					orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"User not found with ID: "+ task.getUser().getId()));
 			task.setUser((selectedUser));
+
+			updatedCategory = categoryService.getCategoryByTitle(task.getCategory().getTitle());
+			task.setCategory(updatedCategory);
 			taskService.updateTaskStatus(task);
 
 			return ResponseEntity.ok("Task Updated!");
@@ -85,7 +88,7 @@ public class TaskController {
 
 		if (taskOptional.isPresent()) {
 			Task task = taskOptional.get();
-			//task.setIsCompleted(!task.getIsCompleted());
+			task.setIsCompleted(!task.getIsCompleted());
 			taskService.updateTaskStatus(task);
 
 			return ResponseEntity.ok("Completion Status Updated!");
@@ -94,14 +97,14 @@ public class TaskController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id}/deleted")
 	public ResponseEntity<String> deleteTask(@PathVariable Long id){
 
 		taskService.deleteTask(id);
 
 		try {
 			taskService.deleteTask(id);
-			return ResponseEntity.ok("User Successfully Deleted");
+			return ResponseEntity.ok("Task Successfully Deleted");
 		}
 		catch (ResponseStatusException ex){
 

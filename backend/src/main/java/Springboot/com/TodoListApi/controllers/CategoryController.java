@@ -1,4 +1,4 @@
-//package Springboot.com.TodoListApi.controllers;
+package Springboot.com.TodoListApi.controllers;
 
 import Springboot.com.TodoListApi.entities.Category;
 import Springboot.com.TodoListApi.entities.Task;
@@ -13,7 +13,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.List;
 import java.util.Optional;
 
-/*
+
 @RestController
 @RequestMapping("/categories")
 @CrossOrigin("*")
@@ -31,7 +31,7 @@ public class CategoryController {
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
-    @GetMapping("/{id}")
+    /*@GetMapping("/{id}")
     public Category getCategoryById(@PathVariable Long id) {
         return categoryService.getCategoryById(id)
                 .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with this id is not exist" + id));
@@ -54,6 +54,5 @@ public class CategoryController {
         catch (ResponseStatusException ex){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
         }
-    }
-
-}*/
+    }*/
+}

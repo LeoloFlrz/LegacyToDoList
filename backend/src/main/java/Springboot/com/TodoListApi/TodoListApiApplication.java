@@ -10,5 +10,4 @@ public class TodoListApiApplication {
 		System.out.println("Welcome to the TodoList App");
 
 	}
-
 }
