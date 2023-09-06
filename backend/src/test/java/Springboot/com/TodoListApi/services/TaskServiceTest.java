@@ -42,7 +42,7 @@ public class TaskServiceTest {
         expectedTask.setId(1L);
         expectedTask.setTitle("Task 3");
         expectedTask.setDescription("Description 3");
-        expectedTask.setCompleted(true);
+        expectedTask.setIsCompleted(true);
 
         when(taskRepository.save(expectedTask)).thenReturn(expectedTask);
 
@@ -76,13 +76,13 @@ public class TaskServiceTest {
     @Test
     public void testUpdateTaskStatus() {
         Task taskToUpdate = tasks.get(0);
-        taskToUpdate.setCompleted(false);
+        taskToUpdate.setIsCompleted(false);
 
         when(taskRepository.save(taskToUpdate)).thenReturn(taskToUpdate);
 
         taskService.updateTaskStatus(taskToUpdate);
 
-        assertFalse(taskToUpdate.isCompleted());
+        assertFalse(taskToUpdate.getIsCompleted());
     }
 
     @Test
