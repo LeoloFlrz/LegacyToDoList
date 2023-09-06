@@ -55,11 +55,11 @@ onMounted( async () => {
 });
 
 const getTasks = async (id) => {
-    let response = await ApiConnection.getTaskById(id)
-    console.log(response)
-    task.value = response.data;
-    userId.value = task.value.user.id
-    console.log(userId.value);
+        let response = await ApiConnection.getTaskById(id)
+        console.log(response)
+        task.value = response.data;
+        userId.value = task.value.user.id
+        console.log(userId.value);
 }
 
 const fetchUsers = async () => {

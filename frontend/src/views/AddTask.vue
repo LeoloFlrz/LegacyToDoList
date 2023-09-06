@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import { ref, onMounted, computed, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue';
 import axios from 'axios';
@@ -14,9 +15,14 @@ const task = ref({
 
 const users = ref([]);
 const categories = ref();
+const categories = ref();
 const selectedUser = ref("Select_from_list");
 const selectedCategory = ref("Select_from_list");
+const addCategory = ref(false);
+const addedCategory = ref({title: ''});
 const router = useRouter();
+const currentCategories = ref();
+
 const addtask = () => {
     const formattedDueDate = new Date(task.value.dueDate).toISOString();
     const newTask = {
@@ -49,12 +55,27 @@ const isCompleted = computed(() => {
     );
 })
 
+const ftAddCategory = () =>
+{
+	if (currentCategories.value.includes(addedCategory.value.title.toLocaleLowerCase()))
+		alert("Category already exists: " + addedCategory.value.title);
+	else
+	{
+		categories.value.push(addedCategory.value);
+		ApiConnection.addCategory(addedCategory.value);
+		alert("New category " + addedCategory.value.title + " added");
+		addedCategory.value = '';
+		addCategory.value = false;
+	}
+}
+
 onBeforeMount(async() => {
 	let uResponse = await ApiConnection.fetchUsers();
 	let cResponse = await ApiConnection.fetchCategories();
 
 	users.value = uResponse.data;
 	categories.value = cResponse.data;
+	currentCategories.value = categories.value.map(x => x.title.toLowerCase());
 })
 
 </script>
@@ -119,6 +140,16 @@ onBeforeMount(async() => {
                                     </select>
                                 </div>
                             </div>
+							<div class="add-category">
+								<div class="add-category-button">
+									<p>Add New Category</p>
+									<button class="plus-button" @click="addCategory = !addCategory">+</button>
+								</div>
+								<div v-if="addCategory">
+									<input type="text" v-model="addedCategory.title">
+									<button @click="ftAddCategory()">add</button>
+								</div>
+							</div>
                             <br><br>
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group">
@@ -134,3 +165,32 @@ onBeforeMount(async() => {
         </div>
     </main>
 </template>
+
+<style scoped>
+	.add-category
+	{
+		display: flex;
+		justify-content: space-around;
+	}
+	.add-category-button
+	{
+		display: flex;
+	}
+
+
+
+	.plus-button
+	{
+		background-color: #4CAF50;
+  		border: none;
+  		color: white;
+  		padding: 5px 10px;
+  		text-align: center;
+  		text-decoration: none;
+  		display: flex;
+    	height: 27px;
+    	align-items: center;
+  		font-size: 20px;
+		margin: 0 1rem;
+	}
+</style>
