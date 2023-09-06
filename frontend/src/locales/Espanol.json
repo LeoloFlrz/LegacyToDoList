@@ -13,7 +13,8 @@
        "Title": "Título",
        "description": "Descripción",
        "duedate": "Fecha de Vencimiento",
-       "assignTo": "Asignar a"
+       "assignTo": "Asignar a",
+	   "category":"Categoría"
 
 
 }

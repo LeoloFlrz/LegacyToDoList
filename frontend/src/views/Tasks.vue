@@ -131,6 +131,7 @@ onUnmounted(() => {
                                     <th scope="col">Due Date</th>
                                     <th scope="col">Assigned To</th>
                                     <th scope="col">Is Completed?</th>
+                                    <th scope="col">Category</th>
                                     <th scope="col">Action</th>
                                 </tr>
                             </thead>
@@ -151,6 +152,7 @@ onUnmounted(() => {
                                         <input type="checkbox" id="checkbox" v-model="task.isCompleted"
                                             @change="updateCompletionStatus(task)">
                                     </td>
+                                    <td>{{ task.category.title }}</td>
                                     <td>
                                         <div class="button-group">
                                         <a class="btn btn-primary" :href="`/update/${task.id}`">Edit</a>
@@ -179,6 +181,7 @@ onUnmounted(() => {
 
 .button-group {
     display: flex;
+	flex-direction: column;
     align-items: center;
 }
 

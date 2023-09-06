@@ -15,7 +15,6 @@
       "Title":"Title",
       "description":"Description",
       "duedate":"Due Date",
-      "assignTo":"Assign To"
-
-
+      "assignTo":"Assign To",
+      "category":"Category"
     }

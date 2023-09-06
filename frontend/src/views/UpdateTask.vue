@@ -25,34 +25,72 @@
     };
 
     const getTasks = async (id) => {
-        let response = await ApiConnection.getTaskById(id)
-        console.log(response)
-        task.value = response.data;
-        userId.value = task.value.user.id
-        console.log(userId.value);
-    }
+const task = ref({});
+const users = ref([]);
+const selectedUser = ref('');
+const router = useRouter();
+const route = useRoute();
+const userId = ref()
+const categories = ref();
+const selectedCategory = ref('');
 
-    const fetchUsers = async () => {
-        let response = await ApiConnection.fetchUsers();
-        users.value = response.data;
-        console.log(users.value);
-        console.log(response);
-    }
+// changes date format
+const formatDueDateForBackend = (date) => {
+    const formattedDate = new Date(date);
 
-    const updateTask = async() => {
-        const formattedDueDate = formatDueDateForBackend(task.value.dueDate);
-        const updatedTask = {
-            ...task.value, dueDate: formattedDueDate, user: { id: selectedUser.value }
-        }
-        await ApiConnection.updateTask(task.value.id, updatedTask);
-        alert("Task updated successfully");
+    const year = formattedDate.getFullYear();
+    const month = (formattedDate.getMonth() + 1).toString().padStart(2, '0');
+    const day = formattedDate.getDate().toString().padStart(2, '0');
+    const hours = formattedDate.getHours().toString().padStart(2, '0');
+    const minutes = formattedDate.getMinutes().toString().padStart(2, '0');
+    const seconds = formattedDate.getSeconds().toString().padStart(2, '0');
+    const formattedDateString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    return formattedDateString;
+};
+
+onMounted( async () => {
+    await getTasks(route.params.id);
+    fetchUsers();
+	fetchCategories();
+});
+
+const getTasks = async (id) => {
+    let response = await ApiConnection.getTaskById(id)
+    console.log(response)
+    task.value = response.data;
+    userId.value = task.value.user.id
+    console.log(userId.value);
+}
+
+const fetchUsers = async () => {
+    let response = await ApiConnection.fetchUsers();
+    users.value = response.data;
+    console.log(users.value);
+    console.log(response);
+}
+
+const fetchCategories = async () => {
+	let response = await ApiConnection.fetchCategories();
+    categories.value = response.data;
+}
+
+const updateTask = () => {
+    const formattedDueDate = formatDueDateForBackend(task.value.dueDate);
+    const updatedTask = {
+        ...task.value, dueDate: formattedDueDate, 
+		user: { id: selectedUser.value },
+		category: {title: selectedCategory.value}
+    }
+	try{
+		ApiConnection.updateTask(task.value.id, updatedTask);
+		alert("Task updated successfully");
         router.push('/tasklist');
-    };
-
-    onMounted( async () => {
-        await getTasks(route.params.id);
-        fetchUsers();
-    });
+	}
+	catch(error)
+	{
+		alert(error.message);
+	}
+}
 
 </script>
 <template>
@@ -102,6 +140,17 @@
                                     <select id="userName" name="userName" class="form-control" v-model="selectedUser">
                                         <option value="Select_from_list" disabled>Select_from_list</option>
                                         <option v-for="user in users" :key="user.id" :value="user.id">{{ user.username }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+							<!-- Category -->
+                            <div class="form-outline mb-4">
+                                <div class="col-md-12 form-group mb-3">
+                                    <label for="category" class="form-label">{{ $t("category") }}</label>
+                                    <select id="category" name="category" class="form-control" v-model="selectedCategory">
+                                        <option value="Select_from_list" disabled>Select_from_list</option>
+                                        <option v-for="category in categories" :key="category.id" :value="category.title">{{ category.title }}
                                         </option>
                                     </select>
                                 </div>

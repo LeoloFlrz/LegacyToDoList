@@ -3,6 +3,7 @@ import axios from 'axios'
 
 const url = "http://localhost:8080/tasks"
 const urlUsers = "http://localhost:8080/users"
+const urlCategories = "http://localhost:8080/categories"
 
 class ApiConnection {
     async getAllTasks() {
@@ -49,6 +50,7 @@ class ApiConnection {
             let response = await axios.put(`${url}/${id}`, task);
             return (response);
         } catch (error) {
+			console.log(error.message);
             return (error.message);
         }
     }
@@ -89,6 +91,14 @@ class ApiConnection {
         }
     }
 
+    async fetchCategories() {
+        try {
+            let response = await axios.get(urlCategories)
+            return (response)
+        } catch (error) {
+            return (error.message)
+        }
+    }
 }
 
 export default new ApiConnection();
