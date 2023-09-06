@@ -80,6 +80,16 @@ class ApiConnection {
             return (error.message)
         }
     }
+
+	async addCategory(category) {
+		try {
+			let response = await axios.post(urlCategories, category);
+            return (response);
+		}
+		catch (error) {
+			return (error.message);
+		}
+	}
 }
 
 export default new ApiConnection();
