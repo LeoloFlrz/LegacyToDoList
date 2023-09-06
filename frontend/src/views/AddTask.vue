@@ -96,7 +96,7 @@ onBeforeMount(async() => {
                     <div id="radius-shape-2" class="position-absolute shadow-5-strong"></div>
                     <h2 class="mt-3 display-5 fw-bold ls-tight text-center" style="color: hsl(218, 81%, 75%)">{{ $t("taskPageTitle") }}</h2>
                     <div class="card-body px-4 py-5 px-md-5">
-                        <form @submit.prevent="addtask">
+                        <form @submit.prevent="preventDefault">
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group mb-3">
                                     <label for="title" class="form-label">{{ $t("Title") }}</label>
@@ -132,7 +132,7 @@ onBeforeMount(async() => {
                                 <div class="col-md-12 form-group mb-3">
                                     <label for="category" class="form-label">{{ $t("category") }}</label>
                                     <select id="category" name="category" class="form-control" v-model="selectedCategory">
-                                        <option value="Select_from_list" disabled>Select_from_list</option>
+                                        <option value="Default" disabled>Select_from_list</option>
                                         <option v-for="category in categories" :key="category.id" :value="category.title">{{ category.title }}
                                         </option>
                                     </select>
@@ -151,7 +151,8 @@ onBeforeMount(async() => {
                             <br><br>
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group">
-                                    <input class="btn btn-primary w-100" type="submit" :disabled="!isCompleted" value="Submit">
+                                    <!-- <input class="btn btn-primary w-100" type="submit" :disabled="!isCompleted" value="Submit"> -->
+									<button class="btn btn-primary w-100" :disabled="!isCompleted" @click="addtask()">Submit</button>
                                 </div>
                             </div>
                             <div>

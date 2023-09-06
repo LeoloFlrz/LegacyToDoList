@@ -13,6 +13,9 @@ const route = useRoute();
 const userId = ref()
 const categories = ref();
 const selectedCategory = ref('');
+const currentCategories = ref();
+const addCategory = ref(false);
+const addedCategory = ref({title: ''});
 
 // changes date format
 const formatDueDateForBackend = (date) => {
@@ -54,6 +57,21 @@ const fetchUsers = async () => {
 const fetchCategories = async () => {
 	let response = await ApiConnection.fetchCategories();
     categories.value = response.data;
+	currentCategories.value = categories.value.map(x => x.title.toLowerCase());
+}
+
+const ftAddCategory = () =>
+{
+	if (currentCategories.value.includes(addedCategory.value.title.toLocaleLowerCase()))
+		alert("Category already exists: " + addedCategory.value.title);
+	else
+	{
+		categories.value.push(addedCategory.value);
+		ApiConnection.addCategory(addedCategory.value);
+		alert("New category " + addedCategory.value.title + " added");
+		addedCategory.value = '';
+		addCategory.value = false;
+	}
 }
 
 const updateTask = () => {
@@ -95,7 +113,7 @@ const updateTask = () => {
                     <h2 class="mt-3 display-5 fw-bold ls-tight text-center" style="color: hsl(218, 81%, 75%)">Update Todo
                         List</h2>
                     <div class="card-body px-4 py-5 px-md-5">
-                        <form @submit.prevent="updateTask">
+                        <form @submit.prevent="preventDefault">
                             <div class="row">
                                 <div class="col-md-12 form-group mb-3">
                                     <label for="title" class="form-label">Title</label>
@@ -131,16 +149,27 @@ const updateTask = () => {
                                 <div class="col-md-12 form-group mb-3">
                                     <label for="category" class="form-label">{{ $t("category") }}</label>
                                     <select id="category" name="category" class="form-control" v-model="selectedCategory">
-                                        <option value="Select_from_list" disabled>Select_from_list</option>
+                                        <option value="Default" disabled>Select_from_list</option>
                                         <option v-for="category in categories" :key="category.id" :value="category.title">{{ category.title }}
                                         </option>
                                     </select>
                                 </div>
                             </div>
+							<div class="add-category">
+								<div class="add-category-button">
+									<p>Add New Category</p>
+									<button class="plus-button" @click="addCategory = !addCategory">+</button>
+								</div>
+								<div v-if="addCategory">
+									<input type="text" v-model="addedCategory.title">
+									<button @click="ftAddCategory()">add</button>
+								</div>
+							</div>
 
                             <div class="row">
                                 <div class="col-md-12 form-group">
-                                    <input class="btn btn-primary w-100" type="submit" value="Submit">
+                                    <!-- <input class="btn btn-primary w-100" type="submit" value="Submit"> -->
+									<button class="btn btn-primary w-100" @click="updateTask()">Submit</button>
                                 </div>
                             </div>
                         </form>
@@ -150,3 +179,30 @@ const updateTask = () => {
         </div>
     </main>
 </template>
+
+<style scoped>
+	.add-category
+	{
+		display: flex;
+		justify-content: space-around;
+	}
+	.add-category-button
+	{
+		display: flex;
+	}
+
+	.plus-button
+	{
+		background-color: #4CAF50;
+  		border: none;
+  		color: white;
+  		padding: 5px 10px;
+  		text-align: center;
+  		text-decoration: none;
+  		display: flex;
+    	height: 27px;
+    	align-items: center;
+  		font-size: 20px;
+		margin: 0 1rem;
+	}
+</style>
