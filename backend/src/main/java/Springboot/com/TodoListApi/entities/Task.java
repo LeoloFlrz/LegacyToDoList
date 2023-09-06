@@ -40,4 +40,8 @@ public class Task {
 	public void setIsCompleted(boolean completed) {
 		isCompleted = completed;
 	}
+	public void getIsCompleted(boolean completed) {
+		isCompleted = completed;
+	}
+
 }
