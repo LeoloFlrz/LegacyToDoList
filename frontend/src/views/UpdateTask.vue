@@ -16,7 +16,6 @@
     const addCategory = ref(false);
     const addedCategory = ref({title: ''});
 
-    // changes date format
     const formatDueDateForBackend = (date) => {
         const formattedDate = new Date(date);
         const year = formattedDate.getFullYear();
@@ -129,7 +128,6 @@
                                 <input id="dueDate" type="date" name="dueDate" class="form-control" required
                                     v-model="task.dueDate" />
                             </div>
-                            <!--  Dropdown -->
                             <div class="row">
                                 <div class="col-md-12 form-group mb-3">
                                     <label for="userName" class="form-label">User</label>
@@ -140,7 +138,6 @@
                                     </select>
                                 </div>
                             </div>
-							<!-- Category -->
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group mb-3">
                                     <label for="category" class="form-label">{{ $t("category") }}</label>
@@ -164,7 +161,6 @@
 
                             <div class="row">
                                 <div class="col-md-12 form-group">
-                                    <!-- <input class="btn btn-primary w-100" type="submit" value="Submit"> -->
 									<button class="btn btn-primary w-100" @click="updateTask()">Submit</button>
                                 </div>
                             </div>

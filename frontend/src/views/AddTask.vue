@@ -115,7 +115,6 @@ onBeforeMount(async() => {
                                 <input id="dueDate" type="date" name="dueDate" class="form-control" required
                                     v-model="task.dueDate" />
                             </div>
-                            <!-- Dropdown -->
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group mb-3">
                                     <label for="userName" class="form-label">{{ $t("assignTo") }}</label>
@@ -126,7 +125,6 @@ onBeforeMount(async() => {
                                     </select>
                                 </div>
                             </div>
-                            <!-- Category -->
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group mb-3">
                                     <label for="category" class="form-label">{{ $t("category") }}</label>
@@ -150,7 +148,6 @@ onBeforeMount(async() => {
                             <br><br>
                             <div class="form-outline mb-4">
                                 <div class="col-md-12 form-group">
-                                    <!-- <input class="btn btn-primary w-100" type="submit" :disabled="!isCompleted" value="Submit"> -->
 									<button class="btn btn-primary w-100" :disabled="!isCompleted" @click="addtask()">Submit</button>
                                 </div>
                             </div>

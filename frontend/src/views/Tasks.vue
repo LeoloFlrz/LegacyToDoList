@@ -11,7 +11,6 @@ const router = useRouter();
 const route = useRoute();
 
 
-// changes date format
 const formatDueDateForBackend = (date) => {
     const formattedDate = new Date(date);
     const year = formattedDate.getFullYear();
@@ -46,24 +45,6 @@ const getTasks = async () => {
 
 };
 
-/*
-const updateCompletionStatus = (task) => {
-    const newTask = !task.isCompleted;
-    axios.put(`http://localhost:8080/tasks/${task.id}/status`, {
-        isCompleted: newTask
-    })
-
-    .then(() => {
-        console.log(task)
-    })
-    
-        .catch((error) => {
-            console.error('Not able to update task:', error);
-            console.log(task);
-        });
-};
-
-*/
 const updateCompletionStatus = async (task) => {
     let updatedTask = task;
     updatedTask.isCompleted = !task.isCompleted;
@@ -74,7 +55,6 @@ const updateCompletionStatus = async (task) => {
     alert("Status updated successfully");
     location.reload();
 }
-
 
 const deleteTask = async (id) => {
     await ApiConnection.deleteTaskById(id);
@@ -101,14 +81,12 @@ onMounted(() => {
 <template>
     <main>
         <Navbar/>
-        <!-- Table-->
         <div class="container">
             <div class="row ">
                 <div class="col-md-12">
                     <div class="d-flex mt-3 justify-content-center">
                         <h1 style="color: hsl(218, 81%, 75%)">Your Todo List</h1>
                     </div>
-                    <!--Add button -->
                     <div class="d-flex justify-content-start" id="newtask">
                         <a href="/addtask" class="btn btn-primary">New Task</a>
                     </div>
@@ -161,7 +139,6 @@ onMounted(() => {
                 </div>
             </div>
         </div>
-
     </main>
 </template>
 
