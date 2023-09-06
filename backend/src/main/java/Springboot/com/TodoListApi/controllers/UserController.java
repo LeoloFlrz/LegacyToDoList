@@ -34,16 +34,6 @@ public static String uploadDirectory = System.getProperty("user.dir")+ "/src/mai
 	} catch (IOException e) {
 		throw new RuntimeException(e);
 	}
-		//Password Encoder
-//		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//		String encodedPassword = passwordEncoder.encode(user.getPassword());
-//		user.setPassword(encodedPassword);
-		// Before encoding
-		//System.out.println("Raw Password: " + user.getPassword());
-
-
-		// After encoding
-//		System.out.println("Encoded Password: " + encodedPassword);
 
 	}
 	@GetMapping

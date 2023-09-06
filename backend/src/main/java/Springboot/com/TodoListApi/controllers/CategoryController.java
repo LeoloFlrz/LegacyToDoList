@@ -31,28 +31,5 @@ public class CategoryController {
         List<Category> categories = categoryService.getAllCategories();
         return ResponseEntity.ok(categories);
     }
-    /*@GetMapping("/{id}")
-    public Category getCategoryById(@PathVariable Long id) {
-        return categoryService.getCategoryById(id)
-                .orElseThrow(()->new ResponseStatusException(HttpStatus.NOT_FOUND,"Category with this id is not exist" + id));
-    }
-    @PutMapping("/{id}")
-    public ResponseEntity<String> editeCategory(@RequestBody Category category,@PathVariable Long id){
-        if(categoryService.getCategoryById(id).isPresent()) {
-            categoryService.saveCategory(category);
-            System.out.println("Updated category with ID: "+id);
-        }
-        return  ResponseEntity.ok("Not Updated!");
-    }
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteCategory(@PathVariable Long id){
 
-        try {
-            categoryService.deleteCategory(id);
-            return ResponseEntity.ok("Category Successfully Deleted");
-        }
-        catch (ResponseStatusException ex){
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
-        }
-    }*/
 }

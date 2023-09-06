@@ -42,38 +42,4 @@ public class UserService {
 
 	}
 
-//	public void createUserWithProfilePicture(
-//			String username,
-//			String email,
-//			String password,
-//			MultipartFile profilePicture
-//	) {
-//		User user = new User();
-//		user.setUsername(username);
-//		user.setEmail(email);
-//		user.setPassword(password);
-//
-//		if (profilePicture != null && !profilePicture.isEmpty()) {
-//			try {
-//				user.setProfilePicture(profilePicture.getBytes());
-//			} catch (IOException e) {
-//				throw new RuntimeException("Failed to update profile picture", e);
-//			}
-//		}
-//
-//		userRepository.save(user);
-//	}
-//
-//	public void updateUserProfilePicture(Long userId, MultipartFile profilePicture){
-//		User user= userRepository.findById(userId).orElseGet(()->new User());
-//		try {
-//			user.setProfilePicture(profilePicture.getBytes());
-//			userRepository.save(user);
-//		} catch (IOException e) {
-//			throw new RuntimeException("Failed to update profile picture", e);
-//		}
-//	}
-
-
-
 }
