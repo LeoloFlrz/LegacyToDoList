@@ -1,9 +1,7 @@
 <script setup>
-import { ref, onMounted, computed, onBeforeMount } from 'vue';
-import { ref, onMounted, computed, onBeforeMount } from 'vue';
+import { ref, computed, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue';
-import axios from 'axios';
 import ApiConnection from '../services/ApiConnection'
 
 const task = ref({
@@ -14,7 +12,6 @@ const task = ref({
 });
 
 const users = ref([]);
-const categories = ref();
 const categories = ref();
 const selectedUser = ref("Select_from_list");
 const selectedCategory = ref("Select_from_list");
