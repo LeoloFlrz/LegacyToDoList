@@ -49,6 +49,7 @@ class ApiConnection {
             let response = await axios.put(`${url}/${id}`, task);
             return (response);
         } catch (error) {
+			console.log(error.message);
             return (error.message);
         }
     }

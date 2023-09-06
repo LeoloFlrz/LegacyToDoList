@@ -6,12 +6,13 @@ import ApiConnection from '../services/ApiConnection';
 import axios from 'axios';
 
 const task = ref({});
-
 const users = ref([]);
 const selectedUser = ref('');
 const router = useRouter();
 const route = useRoute();
 const userId = ref()
+const categories = ref();
+const selectedCategory = ref('');
 
 // changes date format
 const formatDueDateForBackend = (date) => {
@@ -30,6 +31,7 @@ const formatDueDateForBackend = (date) => {
 onMounted( async () => {
     await getTasks(route.params.id);
     fetchUsers();
+	fetchCategories();
 });
 
 
@@ -40,7 +42,6 @@ const getTasks = async (id) => {
         task.value = response.data;
         userId.value = task.value.user.id
         console.log(userId.value);
-
 }
 
 const fetchUsers = async () => {
@@ -50,20 +51,29 @@ const fetchUsers = async () => {
     console.log(response);
 }
 
+const fetchCategories = async () => {
+	let response = await ApiConnection.fetchCategories();
+    categories.value = response.data;
+}
+
 const updateTask = () => {
     const formattedDueDate = formatDueDateForBackend(task.value.dueDate);
     const updatedTask = {
-        ...task.value, dueDate: formattedDueDate, user: { id: selectedUser.value }
+        ...task.value, dueDate: formattedDueDate, 
+		user: { id: selectedUser.value },
+		category: {title: selectedCategory.value}
     }
-    axios.put(`http://localhost:8080/tasks/${task.value.id}`, updatedTask)
-        .then(() => {
-            alert("Task updated successfully");
-            router.push('/tasklist');
-        })
-        .catch((error) => {
-            console.error("Not able to Update the task:", error.response)
-        });
-};
+	try{
+		ApiConnection.updateTask(task.value.id, updatedTask);
+		alert("Task updated successfully");
+        router.push('/tasklist');
+	}
+	catch(error)
+	{
+		alert(error.message);
+	}
+}
+
 </script>
 <template>
     <main>
@@ -112,6 +122,17 @@ const updateTask = () => {
                                     <select id="userName" name="userName" class="form-control" v-model="selectedUser">
                                         <option value="Select_from_list" disabled>Select_from_list</option>
                                         <option v-for="user in users" :key="user.id" :value="user.id">{{ user.username }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+							<!-- Category -->
+                            <div class="form-outline mb-4">
+                                <div class="col-md-12 form-group mb-3">
+                                    <label for="category" class="form-label">{{ $t("category") }}</label>
+                                    <select id="category" name="category" class="form-control" v-model="selectedCategory">
+                                        <option value="Select_from_list" disabled>Select_from_list</option>
+                                        <option v-for="category in categories" :key="category.id" :value="category.title">{{ category.title }}
                                         </option>
                                     </select>
                                 </div>
