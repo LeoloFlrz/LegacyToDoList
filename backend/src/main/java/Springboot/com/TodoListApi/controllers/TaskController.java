@@ -97,14 +97,14 @@ public class TaskController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@DeleteMapping("/{id}")
+	@DeleteMapping("/{id}/deleted")
 	public ResponseEntity<String> deleteTask(@PathVariable Long id){
 
 		taskService.deleteTask(id);
 
 		try {
 			taskService.deleteTask(id);
-			return ResponseEntity.ok("User Successfully Deleted");
+			return ResponseEntity.ok("Task Successfully Deleted");
 		}
 		catch (ResponseStatusException ex){
 
