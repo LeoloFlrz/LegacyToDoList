@@ -36,7 +36,6 @@ public class TaskController {
 	{
 		selectedCategory = new Category();
 		selectedCategory.setTitle(task.getCategory().getTitle());
-		// Guarda la nueva categoría en la base de datos
 		categoryService.saveCategory(selectedCategory);
 	}
 	task.setUser((selectedUser));

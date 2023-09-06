@@ -23,7 +23,7 @@ public class Task {
 	@JoinColumn(name = "user_id",referencedColumnName = "id")
 	private User user;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id", referencedColumnName = "id")
 	private Category category;
 
