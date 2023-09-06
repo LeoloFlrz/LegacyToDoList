@@ -1,8 +1,9 @@
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, onMounted, computed, onBeforeMount } from 'vue';
 import { useRouter } from 'vue-router';
 import Navbar from '../components/Navbar.vue';
 import axios from 'axios';
+import ApiConnection from '../services/ApiConnection'
 
 const task = ref({
     title: '',
@@ -12,35 +13,33 @@ const task = ref({
 });
 
 const users = ref([]);
+const categories = ref();
 const selectedUser = ref("Select_from_list");
+const selectedCategory = ref("Select_from_list");
 const router = useRouter();
 const addtask = () => {
     const formattedDueDate = new Date(task.value.dueDate).toISOString();
-    const newtask = {
+    const newTask = {
         ...task.value,
         dueDate: formattedDueDate,
         user: {
             id: selectedUser.value
+        },
+        category: {
+            title: selectedCategory.value
         }
     }
-    axios.post('http://localhost:8080/tasks', newtask)
-        .then(() => {
-            alert("task Sucessfully added!")
-            router.push('/tasklist');
-        })
-        .catch(error => {
-            console.error("Not able to add task:", error);
-            console.log(Response.error.data);
-        });
-};
-const fetchUsers = () => {
-    axios.get('http://localhost:8080/users')
-        .then(res => {
-            users.value = res.data;
-        }).catch(error => {
-            console.error('Role Not found!', error);
-        });
-};
+	try{
+		ApiConnection.addTask(newTask);
+		alert("task Sucessfully added!")
+		router.push('/tasklist');
+	}
+	catch (error)
+	{
+		alert("Not able to add task:" + error);
+	}
+}
+
 const isCompleted = computed(() => {
     return (
         task.value.description.trim() !== '' &&
@@ -49,9 +48,15 @@ const isCompleted = computed(() => {
         selectedUser.value !== 'Select_from_list'   
     );
 })
-onMounted(() => {
-    fetchUsers();
-});
+
+onBeforeMount(async() => {
+	let uResponse = await ApiConnection.fetchUsers();
+	let cResponse = await ApiConnection.fetchCategories();
+
+	users.value = uResponse.data;
+	categories.value = cResponse.data;
+})
+
 </script>
 <template>
     <main>
@@ -99,6 +104,17 @@ onMounted(() => {
                                     <select id="userName" name="userName" class="form-control" v-model="selectedUser">
                                         <option value="Select_from_list" disabled>Select_from_list</option>
                                         <option v-for="user in users" :key="user.id" :value="user.id">{{ user.username }}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <!-- Category -->
+                            <div class="form-outline mb-4">
+                                <div class="col-md-12 form-group mb-3">
+                                    <label for="category" class="form-label">{{ $t("category") }}</label>
+                                    <select id="category" name="category" class="form-control" v-model="selectedCategory">
+                                        <option value="Select_from_list" disabled>Select_from_list</option>
+                                        <option v-for="category in categories" :key="category.id" :value="category.title">{{ category.title }}
                                         </option>
                                     </select>
                                 </div>

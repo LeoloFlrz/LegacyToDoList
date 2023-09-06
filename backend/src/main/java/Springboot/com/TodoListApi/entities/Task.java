@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 public class Task {
 
@@ -24,7 +23,7 @@ public class Task {
 	@JoinColumn(name = "user_id",referencedColumnName = "id")
 	private User user;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinColumn(name = "category_id", referencedColumnName = "id")
 	private Category category;
 
@@ -33,5 +32,7 @@ public class Task {
 	private LocalDateTime dueDate;
 	private boolean isCompleted;
 
-
+	public Task()
+	{
+	}
 }
