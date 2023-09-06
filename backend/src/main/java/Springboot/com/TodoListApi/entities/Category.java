@@ -19,4 +19,7 @@ public class Category {
     private Long id;
 
     private String title;
+
+    public Category(long l, String testing, String testeando) {
+    }
 }

@@ -12,8 +12,11 @@ import java.util.Optional;
 public class TaskService {
 @Autowired
 private TaskRepository taskRepository;
-public void createTask(Task task){
+/*public void createTask(Task task){
 	 taskRepository.save(task);
+}*/
+public Task createTask(Task task) {
+	return taskRepository.save(task);
 }
 
 public List<Task> getAllTask(){
