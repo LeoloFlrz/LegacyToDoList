@@ -1,5 +1,6 @@
 import axios from 'axios'
 
+
 const url = "http://localhost:8080/tasks"
 const urlUsers = "http://localhost:8080/users"
 
@@ -61,6 +62,15 @@ class ApiConnection {
         }
     };
 
+    async addUser(user) {
+        try {
+            let response = await axios.post(urlUsers, user);
+            return (response);
+        } catch (error) {
+            return (error.message);
+        }
+    };
+
     async fetchUsers() {
         try {
             let response = await axios.get(urlUsers)
@@ -69,6 +79,16 @@ class ApiConnection {
             return (error.message)
         }
     }
+
+    async updateCompletionStatus(id, task) {
+        try {
+            let response = await axios.put(`${url}/${id}/status`, task)
+            return (response)
+        }catch (error){
+            return (error.message)
+        }
+    }
+
 }
 
 export default new ApiConnection();

@@ -1,41 +1,41 @@
 <script setup>
-import Navbar from '../components/Navbar.vue';
-import { ref, computed } from 'vue'
-import axios from "axios";
-import { useRouter } from 'vue-router';
+    import Navbar from '../components/Navbar.vue';
+    import { ref, computed } from 'vue'
+    import { useRouter } from 'vue-router';
+    import ApiConnection from '../services/ApiConnection';
 
-const user = ref({
-    username: '',
-    email: '',
-    password: ''
-});
-const route = useRouter();
-const profilePicture = ref(null);
-const handleProfilePictureUpload = (event) => {
-    profilePicture.value = event.target.files[0];
-}
-const signUp = () => {
-    const formData = new FormData();
-    for (const key in user.value) {
-        formData.append(key, user.value[key]);
+    const user = ref({
+        username: '',
+        email: '',
+        password: ''
+    });
+    const route = useRouter();
+    const profilePicture = ref(null);
+    const handleProfilePictureUpload = (event) => {
+        profilePicture.value = event.target.files[0];
     }
-    if (profilePicture.value) {
-        formData.append('image', profilePicture.value);
-    }
-    axios.post('http://localhost:8080/users', formData).then(() => {
+
+    const signUp = async () => {
+        const formData = new FormData();
+        for (const key in user.value) {
+            formData.append(key, user.value[key]);
+        }
+        if (profilePicture.value) {
+            formData.append('image', profilePicture.value);
+        }
+        await ApiConnection.addUser(formData);
         alert("User successfully added!")
         route.push('/Viewusers');
-    }).catch(error => {
-        console.error('not able to add!', error);
+    }
+
+    const isFormComplete = computed(() => {
+        return (
+            user.value.username.trim() !== '' &&
+            user.value.email.trim() !== '' &&
+            user.value.password.trim() !== ''
+        );
     });
-}
-const isFormComplete = computed(() => {
-    return (
-        user.value.username.trim() !== '' &&
-        user.value.email.trim() !== '' &&
-        user.value.password.trim() !== ''
-    );
-});
+
 </script>
 <template>
     <main>
@@ -64,14 +64,16 @@ const isFormComplete = computed(() => {
                                 <!-- Profile Picture input -->
                                 <div class="form-outline mb-4">
                                     <label class="profile-picture-label cursor-pointer" for="profilePictureInput">
-                                        <input type="file" @change="handleProfilePictureUpload($event)"
-                                            class="form-control d-none" id="profilePictureInput" ref="fileInput" />
+                                        <input type="file" required @change="handleProfilePictureUpload($event)"
+                                            class="form-control d-none" id="profilePictureInput"
+                                            name="profilePictureInput"
+                                            ref="fileInput"/>
                                         <i class="bi bi-camera-fill"></i>
                                         <span class="overlay-text">Upload Photo</span>
                                     </label>
                                 </div>
                                 <div class="form-outline mb-4">
-                                    <input type="text" class="form-control center" v-model="user.username" />
+                                    <input type="text" class="form-control center" v-model="user.username" required />
                                     <label class="form-label" for="form3Example1">{{ $t("username") }}</label>
                                 </div>
                                 <div class="form-outline mb-4">
