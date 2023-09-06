@@ -77,7 +77,7 @@ const updateCompletionStatus = async (task) => {
 
 
 const deleteTask = async (id) => {
-    ApiConnection.deleteTaskById(id);
+    await ApiConnection.deleteTaskById(id);
     getTasks();
     alert("Task successfully erased!");
     location.reload();
@@ -96,11 +96,6 @@ onMounted(() => {
     getTasks();
     applyFilter();
 });
-
-onUnmounted(() => {
-    
-})
-
 
 </script>
 <template>

@@ -9,7 +9,12 @@
     const selectedUser = ref('');
     const router = useRouter();
     const route = useRoute();
-    const userId = ref()
+    const userId = ref();
+    const categories = ref();
+    const selectedCategory = ref('');
+    const currentCategories = ref();
+    const addCategory = ref(false);
+    const addedCategory = ref({title: ''});
 
     // changes date format
     const formatDueDateForBackend = (date) => {
@@ -24,91 +29,64 @@
         return formattedDateString;
     };
 
+    onMounted( async () => {
+        await getTasks(route.params.id);
+        fetchUsers();
+        fetchCategories();
+    });
+
     const getTasks = async (id) => {
-const task = ref({});
-const users = ref([]);
-const selectedUser = ref('');
-const router = useRouter();
-const route = useRoute();
-const userId = ref()
-const categories = ref();
-const selectedCategory = ref('');
-const currentCategories = ref();
-const addCategory = ref(false);
-const addedCategory = ref({title: ''});
-
-// changes date format
-const formatDueDateForBackend = (date) => {
-    const formattedDate = new Date(date);
-
-    const year = formattedDate.getFullYear();
-    const month = (formattedDate.getMonth() + 1).toString().padStart(2, '0');
-    const day = formattedDate.getDate().toString().padStart(2, '0');
-    const hours = formattedDate.getHours().toString().padStart(2, '0');
-    const minutes = formattedDate.getMinutes().toString().padStart(2, '0');
-    const seconds = formattedDate.getSeconds().toString().padStart(2, '0');
-    const formattedDateString = `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
-    return formattedDateString;
-};
-
-onMounted( async () => {
-    await getTasks(route.params.id);
-    fetchUsers();
-	fetchCategories();
-});
-
-const getTasks = async (id) => {
         let response = await ApiConnection.getTaskById(id)
         console.log(response)
         task.value = response.data;
         userId.value = task.value.user.id
         console.log(userId.value);
-}
-
-const fetchUsers = async () => {
-    let response = await ApiConnection.fetchUsers();
-    users.value = response.data;
-    console.log(users.value);
-    console.log(response);
-}
-
-const fetchCategories = async () => {
-	let response = await ApiConnection.fetchCategories();
-    categories.value = response.data;
-	currentCategories.value = categories.value.map(x => x.title.toLowerCase());
-}
-
-const ftAddCategory = () =>
-{
-	if (currentCategories.value.includes(addedCategory.value.title.toLocaleLowerCase()))
-		alert("Category already exists: " + addedCategory.value.title);
-	else
-	{
-		categories.value.push(addedCategory.value);
-		ApiConnection.addCategory(addedCategory.value);
-		alert("New category " + addedCategory.value.title + " added");
-		addedCategory.value = '';
-		addCategory.value = false;
-	}
-}
-
-const updateTask = () => {
-    const formattedDueDate = formatDueDateForBackend(task.value.dueDate);
-    const updatedTask = {
-        ...task.value, dueDate: formattedDueDate, 
-		user: { id: selectedUser.value },
-		category: {title: selectedCategory.value}
     }
-	try{
-		ApiConnection.updateTask(task.value.id, updatedTask);
-		alert("Task updated successfully");
-        router.push('/tasklist');
-	}
-	catch(error)
-	{
-		alert(error.message);
-	}
-}
+
+    const fetchUsers = async () => {
+        let response = await ApiConnection.fetchUsers();
+        users.value = response.data;
+        console.log(users.value);
+        console.log(response);
+    }
+
+    const fetchCategories = async () => {
+        let response = await ApiConnection.fetchCategories();
+        categories.value = response.data;
+        currentCategories.value = categories.value.map(x => x.title.toLowerCase());
+    }
+
+    const ftAddCategory = () =>
+    {
+        if (currentCategories.value.includes(addedCategory.value.title.toLocaleLowerCase()))
+            alert("Category already exists: " + addedCategory.value.title);
+        else
+        {
+            categories.value.push(addedCategory.value);
+            ApiConnection.addCategory(addedCategory.value);
+            alert("New category " + addedCategory.value.title + " added");
+            addedCategory.value = '';
+            addCategory.value = false;
+        }
+    }
+
+    const updateTask = () => {
+        const formattedDueDate = formatDueDateForBackend(task.value.dueDate);
+        const updatedTask = {
+            ...task.value, dueDate: formattedDueDate, 
+            user: { id: selectedUser.value },
+            category: {title: selectedCategory.value}
+        }
+        try{
+            ApiConnection.updateTask(task.value.id, updatedTask);
+            alert("Task updated successfully");
+            router.push('/tasklist');
+        }
+        catch(error)
+        {
+            alert(error.message);
+        }
+    }
 
 </script>
 <template>

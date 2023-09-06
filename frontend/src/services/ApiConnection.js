@@ -29,7 +29,7 @@ class ApiConnection {
 
     async deleteTaskById(id) {
         try {
-            let response = await axios.delete(`${url}/${id}`);
+            let response = await axios.delete(`${url}/${id}/deleted`);
             return (response);
         } catch (error) {
             return (error.message);
